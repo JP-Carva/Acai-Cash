@@ -1,2 +1,16 @@
-<div>Ta indo</div>
+<div *ngIf="loading()" class="overlay" style="
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;"
+    >
+    <p-progress-spinner ariaLabel="loading"></p-progress-spinner>
+</div>
+<p-toast />
+<p-toast position="top-left" key="tl" />
+<p-toast position="bottom-left" key="bl" />
+<p-toast position="bottom-right" key="br" />
+
 <router-outlet></router-outlet>
