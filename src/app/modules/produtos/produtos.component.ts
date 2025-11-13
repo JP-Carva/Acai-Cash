@@ -14,12 +14,15 @@ import { DialogModule } from "primeng/dialog";
 import { IconFieldModule } from "primeng/iconfield";
 import { InputIconModule } from "primeng/inputicon";
 import { ProgressBarModule } from "primeng/progressbar";
+import { ToastModule } from "primeng/toast";
+import { CommonModule } from "@angular/common";
 
 @Component({
     selector: 'app-produtos',
     standalone: true,
     templateUrl: './produtos.component.html',
     imports: [
+        CommonModule,
         CardModule,
         ButtonModule,
         TableModule,
@@ -30,6 +33,9 @@ import { ProgressBarModule } from "primeng/progressbar";
         DialogModule,
         IconFieldModule,
         InputIconModule,
+        ToastModule,
+        DialogModule,
+        ImageModule,
     ],
 })
 export class ProdutosComponent implements OnInit{
@@ -60,11 +66,18 @@ export class ProdutosComponent implements OnInit{
   }
   
   loadProdutos(): void {
-    this.produtoService.getAll(this.page.pageable.pageNumber, this.page.pageable.pageSize)
+    this.produtoService.getAllProdutos(this.page.pageable.pageNumber, this.page.pageable.pageSize)
       .subscribe((page: Page<Produto>) => {
         this.page = page;
         this.produtos = page.content;
-        this.produtosIniciais = page.content;
+        this.produtosIniciais = [...page.content];
+        this.produtos.forEach(produto => {
+          if (produto.image) {
+                produto.photoView = 'data:image/jpeg;base64,' + produto.image;
+            } else {
+                produto.photoView = '/images/default-product.jpg';
+            }
+        });
       });
   }
   
@@ -78,9 +91,10 @@ export class ProdutosComponent implements OnInit{
   }
 
   editarProduto(produto: Produto): void {
+    this.route.navigate(['/produtos/cadastrar', produto.id]);
   }
   
-  excluirProduto(produto: Produto): void {
+  excluirProduto(): void {
     if(!this.produtoSelecionado.id) return;
     this.produtoService.deleteProduto(this.produtoSelecionado.id).subscribe(() => {
       this.onDialogDeleteHide();
@@ -96,7 +110,6 @@ export class ProdutosComponent implements OnInit{
   onDialogDeleteShow(produto: Produto): void {
     this.dialogDeleteVisible = true;
     this.produtoSelecionado = produto;
-    throw new Error('Method not implemented.');
     this.cdRef.detectChanges();
   }
 

@@ -20,6 +20,7 @@ import { DialogModule } from "primeng/dialog";
 import { MessageModule } from "primeng/message";
 import { CheckboxModule } from "primeng/checkbox";
 import { FormFieldStateClassDirective } from "@/directive/form-field-state-class";
+import { ToastModule } from "primeng/toast";
 
 @Component({
     selector: 'app-cadastro-produto',
@@ -41,6 +42,7 @@ import { FormFieldStateClassDirective } from "@/directive/form-field-state-class
         FormFieldStateClassDirective,
         ImageModule,
         UploadImageLayoutComponent,
+        ToastModule
         ],
 })
 export class CadastroProdutoComponent implements OnInit {
@@ -49,7 +51,6 @@ export class CadastroProdutoComponent implements OnInit {
     image!: File;
     photoView!: string;
     categoriasProduto = getCategoriasProduto();
-    check = false;
     dialogVisible = false;
 
     produto = {} as Produto;
@@ -97,7 +98,7 @@ export class CadastroProdutoComponent implements OnInit {
             descricao: [''],
             quantidadeEstoque: ['', Validators.required],
             preco: ['', Validators.required],
-            ativo: [],
+            status: [],
         });
     }
 
@@ -113,6 +114,8 @@ export class CadastroProdutoComponent implements OnInit {
                 summary: 'Error',
                 detail: 'Por favor preencha todos os campos obrigatórios.'
             });
+            this.produtoForm.markAllAsTouched();
+            this.produtoForm.markAsDirty();
         }
     }
 

@@ -8,6 +8,6 @@ export interface Produto {
     preco: number;
     quantidadeEstoque: number;
     photoView?: string;
-    ativo: boolean;
+    status: boolean;
     image: File | Blob;
 }

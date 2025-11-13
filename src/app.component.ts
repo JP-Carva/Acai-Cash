@@ -13,7 +13,7 @@ import { ptBrLocation } from './pt-br.primeng';
     standalone: true,
     imports: [RouterModule, CommonModule, ToastModule, ProgressSpinnerModule],
     providers: [MessageService],
-    template: `<router-outlet></router-outlet>`
+    templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
     primengConfig = inject(PrimeNG);

@@ -35,7 +35,7 @@ export class ProdutoService {
         );
     }
 
-    getAll(page: number = 0, size: number = 10): Observable<Page<Produto>> {
+    getAllProdutos(page: number = 0, size: number = 10): Observable<Page<Produto>> {
         const params = new HttpParams()
             .set('page', page.toString())
             .set('size', size.toString());

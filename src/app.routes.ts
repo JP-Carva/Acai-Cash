@@ -23,6 +23,10 @@ export const appRoutes: Routes = [
                 loadComponent: () => import('@/modules/produtos/cadastro-produto/cadastro-produto.component').then(m => m.CadastroProdutoComponent)
             },
             {
+                path: 'produtos/cadastrar/:id',
+                loadComponent: () => import('@/modules/produtos/cadastro-produto/cadastro-produto.component').then(m => m.CadastroProdutoComponent)
+            },
+            {
                 path: 'vendedores',
                 loadComponent: () => import('@/modules/vendedor/vendedor.component').then(m => m.VendedoresComponent)
             },

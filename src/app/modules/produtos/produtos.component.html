@@ -57,24 +57,24 @@
     </ng-template>
     <ng-template #body let-produto>
       <tr>
-        <td style="min-width: 15rem">
-          <span class="image-text" style="margin-left: 0.5em; align-content: centers; ">
-            <img [src]="produto.photoView" width="35" preview class="rounded-full"/>
-            <div class="flex flex-col">
-            <span class="image-text">{{ produto.name }}</span>
-            </div>
-          </span>
-        </td>
-         <td style="min-width: 14rem">
+        <td style="min-width: 10rem" class="col-name">
+                <span class="flex gap-2">
+                    <img [src]="produto.photoView" width="35" class="rounded-full" />
+                    <span class="image-text" style="margin-left: 0.5em; align-content: center;"
+                        >{{ produto.nome }}
+                    </span>
+                </span>
+            </td>
+         <td style="min-width: 10rem">
                 <span class="image-text" style="margin-left: 0.5em; align-content: centers; ">
                   R$ {{ produto.preco}}
                 </span>
             </td>
-            <td style="min-width: 14rem">
+            <td style="min-width: 10rem">
               {{ produto.categoria }}
             </td>
-            <td style="min-width: 14rem">
-              {{ produto.ativo ? 'Ativo' : 'Inativo' }}
+            <td style="min-width: 10rem">
+              {{ produto.status ? 'Ativo' : 'Inativo' }}
             </td>
             <td style="width: 9rem">
               <button pButton text icon="pi pi-pencil" class="!w-6 !h-6 mr-2" (click)="editarProduto(produto)"></button>
@@ -85,3 +85,31 @@
 
     </p-table>
 </div>
+
+<p-dialog
+  [(visible)]="dialogDeleteVisible"
+  (onHide)="onDialogDeleteHide()"
+  [closable]="true"
+  header="Confirmação de exclusão"
+  [modal]="true"
+  styleClass="mx-4 sm:mx-0 sm:w-full md:w-8/12 lg:w-6/12"
+  contentStyleClass="rounded-b border-t border-surface-200 dark:border-surface-700 p-0"
+>
+<div class="flex items-center gap-4 mt-6">
+  <i class="pi pi-exclamation-triangle !text-3xl"></i>
+  <div>
+    <span>Tem certeza que deseja excluir este produto?</span>
+  </div>
+</div>
+<div class="flex items-center gap-4 mt-6">
+  <div>
+    <span class="image-text" style="margin-left: 0.5em; vertical-align: middle;">
+      {{ produtoSelecionado.nome | uppercase }}
+    </span>
+  </div>
+</div>
+<ng-template #footer>
+  <p-button label="Não" icon="pi pi-times" text (onClick)="dialogDeleteVisible = false" />
+  <p-button label="Sim" icon="pi pi-check" text (onClick)="excluirProduto()" />
+</ng-template>
+</p-dialog>
