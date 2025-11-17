@@ -1,0 +1,13 @@
+<div>
+    <div class="flex gap-2">
+        <i class="pi pi-shopping-cart" style="font-size: 2rem"></i>
+        <div class="font-semibold text-xl">Carrinho de compras</div>
+    </div>
+    <div>
+        @for (item of carrinhoService.itensAdicionados(); track $index) {
+            <div>
+            {{ item.nome }} - R$ {{ item.preco }}
+            </div>
+        }
+    </div>
+</div>

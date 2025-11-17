@@ -9,7 +9,6 @@ import { SelectModule } from "primeng/select";
 import { TextareaModule } from "primeng/textarea";
 import { ActivatedRoute, Router } from "@angular/router";
 import { getCategoriasProduto } from "../enums/categoria-produto";
-import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { MessageService } from "primeng/api";
 import { ProdutoService } from "@/services/produto.service";
 import { Produto } from "../models/produto";
