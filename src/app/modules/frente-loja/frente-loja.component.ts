@@ -10,6 +10,7 @@ import { CarrinhoComprasComponent } from "./carrinho-compras/carrinho-compras.co
      selector: "app-frente-loja",
      standalone: true,
      templateUrl: "./frente-loja.component.html",
+     styleUrls: ["./frente-loja.component.css"],
      imports: [
      CommonModule,
      CardModule,

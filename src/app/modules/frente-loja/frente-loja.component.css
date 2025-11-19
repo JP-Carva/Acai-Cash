@@ -1,0 +1,5 @@
+@media (min-width: 1280px) {
+    #coluna-pesagem {
+        min-height: 640px;
+    }
+}

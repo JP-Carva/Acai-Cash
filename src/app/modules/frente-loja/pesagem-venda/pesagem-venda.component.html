@@ -1,12 +1,11 @@
 <p-fluid>
-<div class="font-semibold text-xl mb-4">Nova Venda</div>
+<div class="font-semibold text-xl mb-10">Nova Venda</div>
 
-<form [formGroup]="vendaForm"></form>
-<div class="xl:col-span-12 gap-2 flex flex-wrap">
+<div class="gap-2 flex flex-wrap">
     <div>
         <label for="produtoSelecionado">Selecione o produto</label>
     </div>
-    <p-select class="xl:col-span-12" [options]="produtos" 
+    <p-select [options]="produtos" 
             [(ngModel)]="produtoSelecionado" 
             optionLabel="nome" 
             width="100%"
@@ -16,14 +15,18 @@
     />
 </div>
 
-<div class="xl:col-span-12 gap-2 mt-10">
+<div class="gap-2 mt-5 flex flex-wrap">
+     <div>
+        <label for="peso">Digite o peso do produto</label>
+    </div>
     <p-inputgroup>
         <p-inputnumber
             [(ngModel)]="peso"
             placeholder="Peso"
             [maxFractionDigits]="5"
             mode="decimal"
-            [useGrouping]="false"/>
+            [useGrouping]="false"
+            (keydown.enter)="adicionarAoCarrinho()"/>
         <p-inputgroup-addon>KG</p-inputgroup-addon>
     </p-inputgroup>
 </div>
@@ -41,7 +44,7 @@
 </div>
 
 <div class="flex justify-end gap-4">
-        <p-button type="submit" (click)="adicionarAoCarrinho()" label="Adicionar ao Carrinho" />
-        <p-button type="submit" (click)="limpar()" label="Limpar" severity="secondary"/>
-        </div>
+    <p-button type="submit" (click)="adicionarAoCarrinho()" label="Adicionar ao Carrinho" />
+    <p-button type="submit" (click)="limpar()" label="Limpar" severity="secondary"/>
+</div>
 </p-fluid>

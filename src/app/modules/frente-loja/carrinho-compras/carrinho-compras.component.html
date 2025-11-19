@@ -1,13 +1,43 @@
-<div>
-    <div class="flex gap-2">
+<p-fluid >
+    <div class="flex flex-row gap-2 items-center mb-10">
         <i class="pi pi-shopping-cart" style="font-size: 2rem"></i>
         <div class="font-semibold text-xl">Carrinho de compras</div>
+        <div class="justify-end ml-auto">
+            <p-button label="Limpar Carrinho" icon="pi pi-trash" (click)="carrinhoService.limparCarrinho()"></p-button>
+        </div>
     </div>
     <div>
-        @for (item of carrinhoService.itensAdicionados(); track $index) {
-            <div>
-            {{ item.nome }} - R$ {{ item.preco }}
+        <table class="w-full">
+            <thead class="align-items-center flex-row border-b-1 border-gray-200 pb-2">
+                <tr class="text-left flex-row justify-between">
+                    <th>Produto</th>
+                    <th>Valor</th>
+                    <th class="text-right">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of carrinhoService.itensAdicionados(); track $index) {
+                    <tr>
+                        <td class="py-2">
+                            {{ item.nome }}
+                        </td>
+                        <td class="py-2">
+                            R$ {{ item.preco | number:'1.2-2' }}
+                        </td>
+                        <td class="text-right py-2">
+                            <p-button icon="pi pi-trash" (click)="carrinhoService.removerItem(item)"></p-button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+            <div class="flex justify-between items-center mt-10">
+                <div class="font-semibold text-lg justify-end">
+                    <span style="color: var(--primary-color)">Total do Pedido</span>
+                </div>
+                <div class="font-semibold text-3xl justify-end">
+                    R$ {{ carrinhoService.calcularTotal() | number:'1.2-2' }}
+                </div>
             </div>
-        }
-    </div>
-</div>
+        </div>
+    </p-fluid>

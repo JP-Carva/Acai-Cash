@@ -43,19 +43,11 @@ export class PesagemVendaComponent implements OnInit {
 
     ngOnInit(): void {
         this.carregarProdutos();
-        this.constroiFormulario();
     }
 
     carregarProdutos(): void {
         this.produtoService.getAllProdutos().subscribe(page => {
             this.produtos = page.content.map(p => (p as Produto) );
-        });
-    }
-
-    constroiFormulario(): void{
-        this.vendaForm = this.fb.group({
-            produtoSelecionado: ['', Validators.required],
-            peso: ['', Validators.required],
         });
     }
 
@@ -66,11 +58,11 @@ export class PesagemVendaComponent implements OnInit {
    }
 
     adicionarAoCarrinho(): void {
-        this.carrinhoService.adicionarItem(this.produtoSelecionado);
+        this.carrinhoService.adicionarItem(this.produtoSelecionado, this.subtotal);
+        this.limpar();
     }
 
     limpar(): void {
-        this.vendaForm.reset();
         this.produtoSelecionado = null as any;
         this.peso = null;
     }
