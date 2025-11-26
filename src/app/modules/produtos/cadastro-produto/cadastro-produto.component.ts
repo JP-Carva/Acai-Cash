@@ -113,8 +113,6 @@ export class CadastroProdutoComponent implements OnInit {
                 summary: 'Error',
                 detail: 'Por favor preencha todos os campos obrigatórios.'
             });
-            this.produtoForm.markAllAsTouched();
-            this.produtoForm.markAsDirty();
         }
     }
 
@@ -133,7 +131,7 @@ export class CadastroProdutoComponent implements OnInit {
         }
     }
 
-    criarProduto(formData: FormData): void {
+    criarProduto(formData: FormData){
         this.produtoService.createProduto(formData).subscribe({
             next: () => {
                 this.messageService.add({
@@ -155,7 +153,7 @@ export class CadastroProdutoComponent implements OnInit {
         });
     }
 
-    atualizarProduto(formData: FormData): void {
+    atualizarProduto(formData: FormData) {
         this.produtoService.updateProduto(formData).subscribe({
             next: () => {
                 this.messageService.add({
@@ -173,8 +171,7 @@ export class CadastroProdutoComponent implements OnInit {
                     detail: error.error.message || 'Erro ao atualizar produto. Tente novamente mais tarde.'
                 });
             }
-        });
-            
+        }); 
     }
 
     cancelar(): void {
