@@ -1,0 +1,49 @@
+<p-fluid>
+<div class="font-semibold text-xl mb-10">Nova Venda</div>
+
+<div class="gap-2 flex flex-wrap">
+    <div>
+        <label for="produtoSelecionado">Selecione o produto</label>
+    </div>
+    <p-select [options]="produtos" 
+            [(ngModel)]="produtoSelecionado" 
+            optionLabel="nome" 
+            width="100%"
+            [showClear]="true" 
+            placeholder="Selecione um produto" 
+            class="w-full" 
+    />
+</div>
+
+<div class="gap-2 mt-5 flex flex-wrap">
+     <div>
+        <label for="peso">Digite o peso do produto</label>
+    </div>
+    <p-inputgroup>
+        <p-inputnumber
+            [(ngModel)]="peso"
+            placeholder="Peso"
+            [maxFractionDigits]="5"
+            [maxlength]="6"
+            (keydown.enter)="adicionarAoCarrinho()"/>
+        <p-inputgroup-addon>KG</p-inputgroup-addon>
+    </p-inputgroup>
+</div>
+
+<div class="card text-xl">
+    @if(produtoSelecionado && produtoSelecionado.preco) {
+        <div class="flex gap-2">
+            {{ peso | number:'1.3-5'}} × {{ produtoSelecionado.preco | currency:'BRL':'symbol':'1.2-2' }}/kg
+            = <strong>{{ subtotal | currency:'BRL':'symbol':'1.2-2' }}</strong>
+        </div>
+    }
+    @else{
+        <div class="text-xl text-muted">Selecione um produto e informe o peso para ver o cálculo...</div>
+    }
+</div>
+
+<div class="flex justify-end gap-4">
+    <p-button type="submit" (click)="adicionarAoCarrinho()" label="Adicionar ao Carrinho" />
+    <p-button type="submit" (click)="limpar()" label="Limpar" severity="secondary"/>
+</div>
+</p-fluid>

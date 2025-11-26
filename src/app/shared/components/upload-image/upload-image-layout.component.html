@@ -1,11 +1,13 @@
 <div>
     <div class="w-full flex-col">
         <p-fieldset class="flex-col" legend="Upload de Foto">
-            <div *ngIf="photoView" class="card flex flex-col gap-2 items-center">
+            @if (photoView) {
+            <div class="card flex flex-col gap-2 items-center">
             <span class="font-semibold">Preview de Foto</span>
              
             <p-image preview [src]="photoView" alt="Foto do Membro" [width]="'100'"/>
             </div>
+            }
             <div class="flex gap-4 justify-center">
             <input #fileInput hidden type="file" icon="pi pi-upload"  (change)="fileChangeEvent($event)" />
             <p-button label="Escolher Foto" icon="pi pi-upload" class="p-button-outlined" (onClick)="fileInput.click()"></p-button>

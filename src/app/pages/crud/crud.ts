@@ -153,7 +153,7 @@ interface ExportColumn {
                     <div>
                         <label for="name" class="block font-bold mb-3">Name</label>
                         <input type="text" pInputText id="name" [(ngModel)]="product.name" required autofocus fluid />
-                        <small class="text-red-500" *ngIf="submitted && !product.name">Name is required.</small>
+                        @if(submitted && !product.name){<small class="text-red-500">Name is required.</small>}
                     </div>
                     <div>
                         <label for="description" class="block font-bold mb-3">Description</label>

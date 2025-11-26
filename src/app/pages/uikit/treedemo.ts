@@ -30,9 +30,11 @@ import { NodeService } from '../service/node.service';
                     <tr [ttRow]="rowNode" [ttSelectableRow]="rowNode">
                         <td *ngFor="let col of columns; let i = index">
                             <span class="flex items-center gap-2">
-                                <p-treeTableToggler [rowNode]="rowNode" *ngIf="i === 0" />
-                                <p-treeTableCheckbox [value]="rowNode" *ngIf="i === 0" />
+                                @if(i === 0) {
+                                <p-treeTableToggler [rowNode]="rowNode" />
+                                <p-treeTableCheckbox [value]="rowNode" />
                                 {{ rowData[col.field] }}
+                                }
                             </span>
                         </td>
                     </tr>

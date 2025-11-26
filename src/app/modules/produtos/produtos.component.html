@@ -11,7 +11,7 @@
     (onPage)="loadPage($event)"
     dataKey="id" 
     [totalRecords]="page.totalElements"
-    styleClass="p-datatable-customers" 
+    class="p-datatable-customers" 
     [rowHover]="true" 
     [rows]="page.pageable.pageSize"
     size="small"
@@ -36,6 +36,12 @@
             <p-sortIcon field="preco"></p-sortIcon>    
           </div>
         </th>
+        <th pSortableColumn="quantidadeEstoque">
+          <div class="flex items-center gap-2">
+            Em Estoque 
+            <p-sortIcon field="quantidadeEstoque"></p-sortIcon>
+          </div>
+        </th>
         <th pSortableColumn="categoria">
           <div class="flex items-center gap-2">
           Categoria 
@@ -56,8 +62,8 @@
       </tr>
     </ng-template>
     <ng-template #body let-produto>
-      <tr>
-        <td style="min-width: 10rem" class="col-name">
+        <tr>
+            <td style="min-width: 10rem">
                 <span class="flex gap-2">
                     <img [src]="produto.photoView" width="35" class="rounded-full" />
                     <span class="image-text" style="margin-left: 0.5em; align-content: center;"
@@ -65,15 +71,18 @@
                     </span>
                 </span>
             </td>
-         <td style="min-width: 10rem">
-                <span class="image-text" style="margin-left: 0.5em; align-content: centers; ">
-                  R$ {{ produto.preco}}
-                </span>
+            <td style="min-width: 9rem">
+              <span class="image-text" style="margin-left: 0.5em; align-content: centers; ">
+                R$ {{ produto.preco}}
+              </span>
             </td>
-            <td style="min-width: 10rem">
+            <td style="min-width: 9rem">
+              {{produto.quantidadeEstoque}}
+            </td>
+            <td style="min-width: 9rem">
               {{ produto.categoria }}
             </td>
-            <td style="min-width: 10rem">
+            <td style="min-width: 9rem">
               {{ produto.status ? 'Ativo' : 'Inativo' }}
             </td>
             <td style="width: 9rem">
