@@ -1,1 +1,56 @@
-<div>Forma de Pagamento</div>
+<p-fluid>
+    <div class="flex flex-row">
+        <div class="font-semibold text-xl">Forma de pagamento</div>
+    </div>
+    <div class="flex flex-row justify-between mt-5 gap-4">
+        <div class="flex flex-col gap-2">
+           <p-button
+                label="DINHEIRO"
+                (click)="toggleOption(tipoPagamento.DINHEIRO)"
+                [disabled]="isDisabled(tipoPagamento.DINHEIRO)"
+                [variant]="isSelected(tipoPagamento.DINHEIRO) ? 'outlined' : undefined">
+            </p-button>
+            <p-button
+                label="CARTÃO"
+                (click)="toggleOption(tipoPagamento.CARTAO)"
+                [disabled]="isDisabled(tipoPagamento.CARTAO)"
+                [variant]="isSelected(tipoPagamento.CARTAO) ? 'outlined' : undefined">
+            </p-button>
+            <p-button
+                label="PIX"
+                (click)="toggleOption(tipoPagamento.PIX)"
+                [disabled]="isDisabled(tipoPagamento.PIX)"
+                [variant]="isSelected(tipoPagamento.PIX) ? 'outlined' : undefined">
+            </p-button>
+             <div class="flex flex-row items-center gap-2">
+                <span class="font-bold">Mais de uma opção</span>
+                <p-toggleswitch class="mt-2"
+                    [(ngModel)]="maisOpcoesPagamento"
+                    (ngModelChange)="onMaisOpcoesChange($event)"
+                />
+            </div>
+        </div>
+        <div class="flex flex-col gap-2" [formGroup]="formaPagamentoForm">
+            @for (item of tiposPagamentoSelecionados; track $index) {
+                 <div class="flex flex-col gap-1">
+                    <p-inputnumber
+                    [formControlName]="formasPagamento[item].control"
+                    [placeholder]="formasPagamento[item].placeHolder"
+                    [maxFractionDigits]="2"
+                    [maxlength]="6"
+                    keydown.enter/>
+                </div>
+            }
+            <div>
+                <span class="font-bold">Restante a ser Pago: R${{ valorFinal | number:'1.2-2' }}</span>
+                @if (troco > 0) {
+                    <span class="text-green-600 font-semibold ml-4">Troco: R${{ troco | number:'1.2-2' }}</span>
+                } 
+            </div>
+        </div>
+    </div>
+    <div class="flex justify-end gap-4 mt-10">
+    <p-button type="submit" (click)="finalizarVenda()" label="Finalizar Venda" />
+    <p-button type="submit" (click)="cancelarVenda()" label="Cancelar Venda" severity="secondary"/>
+</div>
+</p-fluid>

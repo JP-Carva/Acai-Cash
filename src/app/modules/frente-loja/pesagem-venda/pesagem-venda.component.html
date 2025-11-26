@@ -24,8 +24,7 @@
             [(ngModel)]="peso"
             placeholder="Peso"
             [maxFractionDigits]="5"
-            mode="decimal"
-            [useGrouping]="false"
+            [maxlength]="6"
             (keydown.enter)="adicionarAoCarrinho()"/>
         <p-inputgroup-addon>KG</p-inputgroup-addon>
     </p-inputgroup>

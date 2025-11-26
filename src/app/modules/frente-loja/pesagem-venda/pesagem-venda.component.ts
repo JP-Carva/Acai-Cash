@@ -11,6 +11,9 @@ import { InputGroupModule } from "primeng/inputgroup";
 import { InputGroupAddonModule } from "primeng/inputgroupaddon";
 import { InputNumberModule } from "primeng/inputnumber";
 import { SelectModule } from "primeng/select";
+import { ItemVenda } from "../model/itemVenda";
+import { MessageService } from "primeng/api";
+import { ToastModule } from "primeng/toast";
 
 @Component({
     selector: 'app-pesagem-venda',
@@ -27,19 +30,19 @@ import { SelectModule } from "primeng/select";
     FluidModule,
     ButtonModule,
     ReactiveFormsModule,
+    ToastModule
 ],
 })
 export class PesagemVendaComponent implements OnInit {
     
-    peso: number | null = null;
+    peso!: number;
     produtos: Produto[] = [];
     produtoSelecionado = {} as Produto;
     
     produtoService = inject(ProdutoService);
     fb = inject(FormBuilder);
     carrinhoService = inject(CarrinhoService);
-
-    vendaForm!: FormGroup;
+    messageService = inject(MessageService);
 
     ngOnInit(): void {
         this.carregarProdutos();
@@ -58,13 +61,22 @@ export class PesagemVendaComponent implements OnInit {
    }
 
     adicionarAoCarrinho(): void {
-        this.carrinhoService.adicionarItem(this.produtoSelecionado, this.subtotal);
-        this.limpar();
+        if (this.peso) {
+            const itemVenda = {id: Math.random(), produto: this.produtoSelecionado, peso: this.peso ?? 0 } as ItemVenda;
+            this.carrinhoService.adicionarItem(itemVenda);
+            this.limpar();
+        }
+        else {
+            this.messageService.add({
+                severity:'error', 
+                summary: 'Erro', 
+                detail: 'Por favor, adicione um peso válido para adicionar o produto ao carrinho.'});
+        }
     }
 
     limpar(): void {
         this.produtoSelecionado = null as any;
-        this.peso = null;
+        this.peso = null as any;
     }
 
 }

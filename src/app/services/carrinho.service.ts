@@ -1,3 +1,4 @@
+import { ItemVenda } from "@/modules/frente-loja/model/itemVenda";
 import { Produto } from "@/modules/produtos/models/produto";
 import { computed, Injectable, signal } from "@angular/core";
 
@@ -6,14 +7,14 @@ import { computed, Injectable, signal } from "@angular/core";
 })
 export class CarrinhoService {
 
-    itensAdicionados = signal<Produto[]>([]);
+    itensAdicionados = signal<ItemVenda[]>([]);
 
-    adicionarItem(produto: Produto, subtotal: number): void {
-        this.itensAdicionados.update(itens => [...itens, { ...produto, preco: subtotal }]);
+    adicionarItem(itemVenda: ItemVenda): void {
+        this.itensAdicionados.update(itens => [...itens, itemVenda]);
     }
 
-    removerItem(produto: Produto): void {
-        this.itensAdicionados.update(itens => itens.filter(item => item.id !== produto.id));
+    removerItem(itemVenda: ItemVenda): void {
+        this.itensAdicionados.update(itens => itens.filter(item => item.id !== itemVenda.id));
     }
 
     limparCarrinho(): void {
@@ -21,6 +22,6 @@ export class CarrinhoService {
     }
 
     calcularTotal(): number {
-        return this.itensAdicionados().reduce((total, item) => total + item.preco, 0);
+        return this.itensAdicionados().reduce((total, item) => total + item.peso * item.produto.preco, 0);
     }
 }
