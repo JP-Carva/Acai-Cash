@@ -1,5 +1,5 @@
 import { CarrinhoService } from "@/services/carrinho.service";
-import { FrenteLojaService } from "@/services/frente-loja.service";
+import { VendaService } from "@/services/venda.service";
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -45,7 +45,7 @@ export class FormaPagamentoComponent implements OnInit {
     maisOpcoesPagamento = false;
     
     carrinhoService = inject(CarrinhoService);
-    frenteLojaService = inject(FrenteLojaService);
+    vendaService = inject(VendaService);
     fb = inject(FormBuilder);
     messageService = inject(MessageService);
   
@@ -135,7 +135,7 @@ export class FormaPagamentoComponent implements OnInit {
             const venda = {itensVenda: this.carrinhoService.itensAdicionados().map(item => { item.id = undefined; return item; })} as Venda;
             venda.pagamentoVenda = formasPagamento;
             
-            this.frenteLojaService.createVenda(venda).subscribe({
+            this.vendaService.createVenda(venda).subscribe({
                 next: (venda) => {
                     console.log('Venda registrada com sucesso:', venda);
                     this.messageService.add({

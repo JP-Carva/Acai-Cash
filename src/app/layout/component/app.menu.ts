@@ -9,14 +9,14 @@ import { AppMenuitem } from './app.menuitem';
     standalone: true,
     imports: [CommonModule, AppMenuitem, RouterModule],
     template: `<ul class="layout-menu">
-        <ng-container *ngFor="let item of model; let i = index">
-            @if(!item.separator) {
-                <li app-menuitem [item]="item" [index]="i" [root]="true"></li>
-            }
-            @else {
-                <li class="menu-separator"></li>
-            }
-        </ng-container>
+        @for (item of model; track $index;) {
+                @if(!item.separator) {
+                    <li app-menuitem [item]="item" [index]="$index" [root]="true"></li>
+                }
+                @else {
+                    <li class="menu-separator"></li>
+                }
+        }
     </ul> `
 })
 export class AppMenu {
@@ -35,6 +35,18 @@ export class AppMenu {
                         label: 'Frente de Loja',
                         icon: 'pi pi-fw pi-shopping-cart',
                         routerLink: ['/frente-loja']
+                    },
+                    {
+                        label: 'Caixa',
+                        icon: 'pi pi-fw pi-dollar',
+                        routerLink: ['/caixa'],
+                        items: [
+                            {
+                                label: 'Listar Vendas',
+                                icon: 'pi pi-fw pi-list',
+                                routerLink: ['/caixa']
+                            }
+                        ]
                     },
                     {
                         label: 'Produtos',

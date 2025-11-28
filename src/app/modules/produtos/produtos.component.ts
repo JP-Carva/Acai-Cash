@@ -46,7 +46,7 @@ export class ProdutosComponent implements OnInit{
   cdRef = inject(ChangeDetectorRef);
   messageService = inject(MessageService);
   
-  isSorted: boolean = false;
+  isSorted: boolean | null = null;
   dialogDeleteVisible = false;
   page = newPage;
   

@@ -11,6 +11,10 @@ export const appRoutes: Routes = [
                 loadComponent: () => import('@/modules/dashboard/dashboard.component').then(m => m.DashboardComponent)
             },
             {
+                path: 'caixa',
+                loadComponent: () => import('@/modules/dashboard/caixa/caixa.component').then(m => m.CaixaComponent)
+            },
+            {
                 path: 'frente-loja',
                 loadComponent: () => import('@/modules/frente-loja/frente-loja.component').then(m => m.FrenteLojaComponent)
             },

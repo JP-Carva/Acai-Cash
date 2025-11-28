@@ -24,7 +24,7 @@ export class UploadImageLayoutComponent implements OnInit {
     @ViewChild('fileInput', { static: false }) fileInput!: ElementRef<HTMLInputElement>;
     
     @Input() photoInput = {}  as File;
-    @Output() photoChange = new EventEmitter<File | null>();
+    @Output() photoChange = new EventEmitter<File>();
 
     photo!: File;
     photoView!: string;
@@ -42,23 +42,23 @@ export class UploadImageLayoutComponent implements OnInit {
         }
     }
 
-    private applyPhotoInput(value: string | File ): void {
+    private applyPhotoInput(value: string | Blob ): void {
         if (typeof value === 'string') {
             this.photoView = `data:image/jpeg;base64,${value}`;
             return;
         }
     }
 
-    fileChangeEvent(event: any): void {
+    fileChangeEvent(event: any) {
         this.croppedImage = event.objectUrl;
         this.imageChangedEvent = event;
     }
 
-    imageCropped(event: ImageCroppedEvent): void {
+    imageCropped(event: ImageCroppedEvent) {
         this.croppedImage = event.objectUrl;
     }
 
-    imageLoaded(event: LoadedImage): void {
+    imageLoaded(event: LoadedImage) {
         console.log('Image loaded:', event);
         this.cropperVisible = true;
     }
