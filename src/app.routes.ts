@@ -4,11 +4,20 @@ import { AppLayout } from './app/layout/component/app.layout';
 export const appRoutes: Routes = [
     {
         path: '',
+        redirectTo: 'login',
+        pathMatch: 'full'
+    },
+    {
+        path: '',
         component: AppLayout,
         children: [
             {
                 path: 'dashboard',
                 loadComponent: () => import('@/modules/dashboard/dashboard.component').then(m => m.DashboardComponent)
+            },
+            {
+                path: 'caixa',
+                loadComponent: () => import('@/modules/dashboard/caixa/caixa.component').then(m => m.CaixaComponent)
             },
             {
                 path: 'frente-loja',

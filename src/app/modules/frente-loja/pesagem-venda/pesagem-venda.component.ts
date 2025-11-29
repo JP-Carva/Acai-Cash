@@ -50,7 +50,13 @@ export class PesagemVendaComponent implements OnInit {
 
     carregarProdutos(): void {
         this.produtoService.getAllProdutos().subscribe(page => {
-            this.produtos = page.content.map(p => (p as Produto) );
+            const items = Array.isArray(page) ? page : (page?.content ?? []);
+            this.produtos = (items as any[])
+                .map(p => p as Produto)
+                .filter(p => {
+                    if (typeof p.status === 'boolean') return p.status === true;
+                    return false;
+                });
         });
     }
 

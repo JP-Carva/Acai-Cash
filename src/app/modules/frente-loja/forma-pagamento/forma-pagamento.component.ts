@@ -1,5 +1,5 @@
 import { CarrinhoService } from "@/services/carrinho.service";
-import { FrenteLojaService } from "@/services/frente-loja.service";
+import { VendaService } from "@/services/venda.service";
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -45,7 +45,7 @@ export class FormaPagamentoComponent implements OnInit {
     maisOpcoesPagamento = false;
     
     carrinhoService = inject(CarrinhoService);
-    frenteLojaService = inject(FrenteLojaService);
+    vendaService = inject(VendaService);
     fb = inject(FormBuilder);
     messageService = inject(MessageService);
   
@@ -99,19 +99,18 @@ export class FormaPagamentoComponent implements OnInit {
     }
 
     get totalPago(): number {
-    const valorDinheiro = this.formaPagamentoForm.value.valorDinheiro; 
-        const valorCartao = this.formaPagamentoForm.value.valorCartao; 
-        const valorPix = this.formaPagamentoForm.value.valorPix; 
+        const valorDinheiro = Number(this.formaPagamentoForm.value.valorDinheiro) || 0; 
+        const valorCartao = Number(this.formaPagamentoForm.value.valorCartao) || 0; 
+        const valorPix = Number(this.formaPagamentoForm.value.valorPix) || 0; 
         const totalPago = valorDinheiro + valorCartao + valorPix;
-        return totalPago;
+        // arredonda para 2 casas decimais para evitar erros de ponto flutuante
+        return Number(totalPago.toFixed(2));
     }
 
     get troco(): number {
         const totalPago = this.totalPago;
-        if (totalPago > this.totalDoCarrinho){
-            return totalPago - this.totalDoCarrinho;
-        }
-        return 0;
+        const troco = totalPago - this.totalDoCarrinho;
+        return Number(troco.toFixed(2));
     }
 
     get valorFinal(): number {
@@ -120,22 +119,26 @@ export class FormaPagamentoComponent implements OnInit {
         if (totalPago > this.totalDoCarrinho){
             return 0;
         }
-        return valorFinal; 
+        return Number(valorFinal.toFixed(2)); 
     }
     
 
     finalizarVenda() {
-        if (this.totalPago == this.totalDoCarrinho || this.troco == 0){
-            const formasPagamento = Array.from(this.tiposPagamentoSelecionados).map(tipo => {
-                const formaPagamento = tipo.toString();
-                const valorPago = this.formaPagamentoForm.value[this.formasPagamento[tipo].control];
-                return { formaPagamento, valorPago } as PagamentoVenda;
-            });
+        const formasPagamento = Array.from(this.tiposPagamentoSelecionados).map(tipo => {
+            const formaPagamento = tipo.toString();
+            const valorPago = this.formaPagamentoForm.value[this.formasPagamento[tipo].control];
+            return { formaPagamento, valorPago } as PagamentoVenda;
+        });
+        
+        const venda = {itensVenda: this.carrinhoService.itensAdicionados().map(item => { item.id = undefined; return item; })} as Venda;
+        venda.pagamentoVenda = formasPagamento;
+        
+        const epsilon = 0.005; // tolerância para arredondamento de centavos
+        const trocoZero = Math.abs(this.troco) < epsilon;
+        const totalOk = Math.abs(this.totalPago - this.totalDoCarrinho) < epsilon;
 
-            const venda = {itensVenda: this.carrinhoService.itensAdicionados().map(item => { item.id = undefined; return item; })} as Venda;
-            venda.pagamentoVenda = formasPagamento;
-            
-            this.frenteLojaService.createVenda(venda).subscribe({
+        if (trocoZero && totalOk) {
+            this.vendaService.createVenda(venda).subscribe({
                 next: (venda) => {
                     console.log('Venda registrada com sucesso:', venda);
                     this.messageService.add({
@@ -156,7 +159,13 @@ export class FormaPagamentoComponent implements OnInit {
                     });
                 }
             });
-        } else if( this.totalPago > this.totalDoCarrinho ) {
+        } else if( !trocoZero && this.totalPago < this.totalDoCarrinho ) {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'O valor pago foi insuficiente.'
+            });
+        } else if( !trocoZero && this.totalPago > this.totalDoCarrinho ) {
             this.messageService.add({
                 severity: 'error',
                 summary: 'Error',
@@ -166,14 +175,16 @@ export class FormaPagamentoComponent implements OnInit {
             this.messageService.add({
                 severity: 'error',
                 summary: 'Error',
-                detail: 'O valor pago foi insuficiente.'
+                detail: 'Erro desconhecido. Verifique os valores informados.'
             });
         }
+
     }
     
     cancelarVenda() {
         this.carrinhoService.limparCarrinho();
         this.formaPagamentoForm.reset();
         this.tiposPagamentoSelecionados.clear();
+        this.maisOpcoesPagamento = false;
     }
 }

@@ -20,6 +20,7 @@ import { MessageModule } from "primeng/message";
 import { CheckboxModule } from "primeng/checkbox";
 import { FormFieldStateClassDirective } from "@/directive/form-field-state-class";
 import { ToastModule } from "primeng/toast";
+import { ImageUtil } from "@/utils/image-util";
 
 @Component({
     selector: 'app-cadastro-produto',
@@ -48,6 +49,7 @@ export class CadastroProdutoComponent implements OnInit {
 
     produtoForm!: FormGroup;
     image!: File;
+
     photoView!: string;
     categoriasProduto = getCategoriasProduto();
     dialogVisible = false;
@@ -76,8 +78,8 @@ export class CadastroProdutoComponent implements OnInit {
 
     onChildPhotoChange(file: File | null): void {
         if (file) {
-        this.image = file;
-        this.photoView = URL.createObjectURL(file);
+            this.image = file;
+            this.photoView = URL.createObjectURL(file);
         }
     }
 
@@ -120,17 +122,13 @@ export class CadastroProdutoComponent implements OnInit {
         if (this.produtoForm.valid) {
             const produto = this.produtoForm.getRawValue() as Produto;
             const formData = new FormData();
-
-            if(this.image) {
-                formData.append('image', this.image);
-            }
-
+            
+            formData.append('image', this.image);
             formData.append('produto', new Blob([JSON.stringify(produto)], { type: 'application/json' }));
 
             produto.id ? this.atualizarProduto(formData) : this.criarProduto(formData);
         }
     }
-
     criarProduto(formData: FormData){
         this.produtoService.createProduto(formData).subscribe({
             next: () => {

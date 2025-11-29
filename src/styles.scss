@@ -3,4 +3,16 @@
 @use './assets/layout/layout.scss';
 @use 'primeicons/primeicons.css';
 @use './assets/demo/demo.scss';
-@use './assets/_overrides.scss';
+
+/* Light mode brightness reduction overrides */
+:root:not(.app-dark) {
+	/* Darken ground slightly (was var(--p-surface-100)) */
+	--surface-ground: var(--p-surface-200);
+	/* Optional: adjust text if needed for contrast */
+	--text-color: var(--p-surface-800);
+}
+
+/* Cards/sections optional tweak */
+:root:not(.app-dark) .p-card, :root:not(.app-dark) .layout-main, :root:not(.app-dark) .layout-sidebar {
+	background-color: var(--p-surface-0);
+}

@@ -1,0 +1,50 @@
+<div class="flex flex-col">
+    <div class="mb-2 flex-row gap-3 items-center">
+        <div class="flex flex-row justify-between items-center gap-4 mb-4">
+            <div>
+                <span class="block text-muted-color font-medium">Comparativo Mensal de Vendas (Ano {{ selectedAno }})</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-muted-color">Ano</span>
+                <p-select [options]="anosOptions" [(ngModel)]="selectedAno" (onChange)="onYearChange()"
+                optionLabel="label" optionValue="value" placeholder="Ano" styleClass="w-full md:w-36"></p-select>
+            </div>
+        </div>
+
+        <div class="flex flex-row justify-between items-center gap-4 mb-4">
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-muted-color">Mês</span>
+                <p-select [options]="mesesOptions" [(ngModel)]="selectedMes" (onChange)="onMonthChange()"
+                optionLabel="label" optionValue="value" placeholder="Selecione o mês" class="w-full md:w-36"></p-select>
+            </div>
+            @if (selectedMes === -1) {
+                <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm text-muted-color">Destaque</span>
+                        <p-select [options]="highlightOptions" [(ngModel)]="highlightMes" (onChange)="onMonthChange()"
+                        optionLabel="label" optionValue="value" placeholder="Nenhum" class="w-36"></p-select>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <p-chart type="bar" [data]="chartData" [options]="chartOptions" class="h-100" />
+
+    <!-- Legenda e explicação -->
+    <div class="mt-10">
+        <div class="text-sm text-muted-color mb-4">
+            Comparativo mensal: receita (barras) e quantidade de itens (linha) no ano atual.
+        </div>
+        <div class="flex gap-2 flex-col">
+            <span class="inline-flex items-center gap-2">
+                <span class="inline-block w-2.5 h-2.5 rounded-full" style="background: var(--p-primary-400)"></span>
+                Barras — Receita (R$)
+            </span>
+            <span class="inline-flex items-center gap-2">
+                <span class="inline-block w-2.5 h-2.5 rounded-full" style="background: var(--p-primary-500)"></span>
+                Linha — Qtd. Itens
+            </span>
+        </div>
+    </div>
+</div>
