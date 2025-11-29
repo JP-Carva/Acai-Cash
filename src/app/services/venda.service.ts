@@ -12,11 +12,11 @@ export class VendaService {
 
     http = inject(HttpClient);
 
-    createVenda(venda: Venda){
+    createVenda(venda: Venda): Observable<Venda> {
         return this.http.post<Venda>(baseUrl, venda);
     }
 
-    getVendaById(id: number): Observable<Venda>{
+    getVendaById(id: number){
         return this.http.get<Venda>(`${baseUrl}/${id}`, {responseType: 'json'});
     }
 

@@ -4,7 +4,7 @@ import { PagamentoVenda } from "./pagamentoVenda";
 export interface Venda {
     id?: number;
     dataVenda: Date;
-    horarioVenda: string;
+    horaVenda: string;
     pagamentoVenda: PagamentoVenda[];
     itensVenda: ItemVenda[];
 }

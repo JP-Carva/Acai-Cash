@@ -4,6 +4,11 @@ import { AppLayout } from './app/layout/component/app.layout';
 export const appRoutes: Routes = [
     {
         path: '',
+        redirectTo: 'login',
+        pathMatch: 'full'
+    },
+    {
+        path: '',
         component: AppLayout,
         children: [
             {

@@ -10,6 +10,8 @@ import { RippleModule } from "primeng/ripple";
 import { AuthService } from "../services/auth.service";
 import { MessageService } from "primeng/api";
 import { ToastModule } from "primeng/toast";
+import { CardModule } from "primeng/card";
+import { DialogModule } from "primeng/dialog";
 
 @Component({
   selector: "app-login",
@@ -23,12 +25,13 @@ import { ToastModule } from "primeng/toast";
     FormsModule,
     RippleModule,
     AppFloatingConfigurator,
-    ToastModule
+    ToastModule,
+    CardModule,
+    DialogModule
 ],
-  providers: [MessageService]
 })
 export class LoginComponent {
-    email?: string;
+    login?: string;
     password?: string;
 
     checked: boolean = false;
@@ -38,10 +41,13 @@ export class LoginComponent {
     router = inject(Router);
 
     onSubmit(){
-      if(this.email && this.password) {
-        this.authService.login(this.email, this.password)
+      if(this.login && this.password) {
+        this.authService.login(this.login, this.password)
         .subscribe({
-            next: () => this.router.navigate(['/']),
+            next: () => {
+              this.messageService.add({ severity:'success', summary:'Bem-vindo', detail:'Login efetuado com sucesso' });
+              this.router.navigate(['/dashboard']);
+            },
             error: () => this.messageService.add({
               severity:'error', 
               summary: 'Falha na autenticação', 
@@ -49,7 +55,7 @@ export class LoginComponent {
             })
         });
       }
-      if(!this.email && !this.password){
+      if(!this.login && !this.password || !this.login || !this.password){
       this.messageService.add({
         severity:'error', 
         summary: 'Informe usuário e senha', 

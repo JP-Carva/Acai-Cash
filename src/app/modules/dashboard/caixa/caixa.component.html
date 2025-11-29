@@ -1,0 +1,105 @@
+<div class="card widget-table">
+    <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-2 font-semibold text-xl">
+            <img src="https://raw.githubusercontent.com/JP-Carva/Acai-Cash/refs/heads/master/src/logo.ico" alt="Açaí Cash" style="height:40px;width:40px;object-fit:contain;margin-top: -8px;">
+            Caixa</div>
+        <p-button type="button" iconPos="right" icon="pi pi-plus" label="Nova Venda" (click)="iniciarVenda()"/>
+    </div>
+    <div class="flex items-center mb-4 gap-2"> 
+        <button pButton text icon="pi pi-filter" (click)="filtrarVendas()">Filtrar</button>
+        @if (filtrar == true) {
+            <button pButton text icon="pi pi-times" (click)="cancelarFiltro()">Cancelar Filtro</button>
+        }
+    </div>
+    <p-table
+        #dt
+        [value]="page.content"
+        [paginator]="true"
+        [rows]="5"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        [globalFilterFields]="['id', 'dataVenda', 'horaVenda']"
+        >
+    
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="id">
+                    <div class="flex items-center gap-2">
+                        ID 
+                        <p-sortIcon field="id"></p-sortIcon>
+                    </div>
+                </th>
+                <th pSortableColumn="dataVenda">
+                    <div class="flex items-center gap-2">
+                        Data 
+                        <p-sortIcon field="dataVenda"></p-sortIcon>
+                    </div>
+                </th>
+                <th pSortableColumn="horaVenda">
+                    <div class="flex items-center gap-2">
+                        Hora
+                        <p-sortIcon field="horaVenda"></p-sortIcon>
+                    </div>
+                </th>
+                <th>
+                    Ações
+                </th>
+            </tr>
+            @if (filtrar == true) {
+                <tr>
+                    <th>
+                        <p-columnFilter type="text" field="id" placeholder="Pesquise por ID" ariaLabel="Filter id"></p-columnFilter>
+                    </th>
+                    <th>
+                        <p-columnFilter type="text" field="dataVenda" placeholder="Pesquise por data" ariaLabel="Filter dataVenda" ariaLabel="Filter data"></p-columnFilter>
+                    </th>
+                </tr>
+            }
+        </ng-template>
+        <ng-template pTemplate="body" let-venda>
+
+            <tr>
+                <td>{{ venda.id }}</td>
+                <td>{{ venda.dataVenda | date: 'dd/MM/yyyy' }}</td>
+                <td>{{ venda.horaVenda | slice:0:5}}</td>
+                <td style="width: 6rem">
+                    <button pButton text icon="pi pi-eye" class="!w-6 !h-6 mr-2" (click)="verDetalhesVenda(venda)"></button>
+                    <button pButton text icon="pi pi-trash" class="!w-6 !h-6" (click)="onDialogDeleteShow(venda)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog
+  [(visible)]="dialogDeleteVisible"
+  (onHide)="onDialogDeleteHide()"
+  [closable]="true"
+  header="Confirmação de exclusão"
+  [modal]="true"
+  styleClass="mx-4 sm:mx-0 sm:w-full md:w-8/12 lg:w-6/12"
+  contentStyleClass="rounded-b border-t border-surface-200 dark:border-surface-700 p-0"
+>
+<div class="flex items-center gap-4 mt-6">
+  <i class="pi pi-exclamation-triangle !text-3xl"></i>
+  <div>
+    <span>Tem certeza que deseja excluir este evento?</span>
+  </div>
+</div>
+<div class="flex items-center gap-4 mt-6">
+  <div>
+    <span class="image-text" style="margin-left: 0.5em; vertical-align: middle;">
+      <p>Id: {{ vendaSelecionada.id }} - Data: {{ vendaSelecionada.dataVenda | date: 'dd/MM/yyyy' }} - Hora: {{ vendaSelecionada.horaVenda | slice:0:5 }}</p>
+      <p></p>
+    </span>
+  </div>
+</div>
+<ng-template #footer>
+  <p-button label="Não" icon="pi pi-times" text (onClick)="dialogDeleteVisible = false" />
+  <p-button label="Sim" icon="pi pi-check" text (onClick)="excluirVenda()" />
+</ng-template>
+</p-dialog>
+
+<app-modal-detalhe-venda
+[eventMostraModalDetalheVenda]="eventMostraModalDetalheVenda">
+</app-modal-detalhe-venda>

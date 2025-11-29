@@ -1,6 +1,6 @@
-<app-floating-configurator />
-        <div class="bg-surface-50 dark:bg-surface-950 flex align-items-center justify-center min-h-screen min-w-screen overflow-hidden">
-            <div class="flex flex-col items-center justify-center">
+<div class="layout-wrapper login-wrapper flex align-items-center justify-center min-h-screen">
+    <app-floating-configurator />
+    <div class="flex flex-col items-center justify-center">
                 <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
                     
                     <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="border-radius: 53px">
@@ -14,9 +14,9 @@
                         </div>
 
                         <div class="form-container">
-                            <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
-                            <input pInputText type="text" placeholder="Email"
-                            [(ngModel)]="email" 
+                            <label for="login" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Login</label>
+                            <input pInputText type="text" placeholder="Login"
+                            [(ngModel)]="login" 
                             class="block mb-4"
                             style="max-width: 320px; min-width: 270px" />
 
@@ -38,20 +38,8 @@
                             style="width: 100%; margin-bottom: 20px;" (click)="onSubmit()"></button>
                             
                         </div>
-
-                        <!-- <div class="flex items-center absolute mt-4" style="bottom: 75px">
-                            <div class="flex items-center pr-6 mr-6 border-r border-surface-200 dark:border-surface-700">
-                                <img src="https://raw.githubusercontent.com/JP-Carva/Acai-Cash/refs/heads/master/src/logo.ico" 
-                                style="width: 30px" />
-                                <img src="https://raw.githubusercontent.com/JP-Carva/Acai-Cash/refs/heads/master/src/app/icons/nomeEscuro.png" 
-                                class="ml-2"
-                                style="width: 45px" />
-                            </div>
-                            <span class="text-sm text-surface-500 dark:text-surface-400 mr-4">Copyright 2025</span>
-                        </div> -->
-                    
                     </div>
                 
                 </div>
-            </div>
-        </div>
+    </div>
+</div>

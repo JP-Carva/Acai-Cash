@@ -1,0 +1,21 @@
+<div class="flex flex-col justify-center">
+    <div class="mb-4 flex justify-center">
+        <span class="block text-muted-color font-medium mb-4">Top 5 produtos vendidos (mês atual)</span>
+    </div>
+
+    <div class="flex justify-center">
+        <p-chart type="doughnut" [data]="data" [options]="options" class="h-100" />
+    </div>
+    <!-- Legendas detalhadas com quantidades -->
+    <div class="mt-4">
+        <div class="text-sm text-muted-color mb-2">Top produtos (mês atual)</div>
+        <ul class="list-none m-0 p-0">
+            @for (p of topProdutos; track $index) {
+                <li class="flex justify-between py-1 border-b border-surface-200 dark:border-surface-700 last:border-b-0">
+                    <span class="text-surface-900 dark:text-surface-0">{{ p.nome }}</span>
+                    <span class="text-muted-color">{{ p.quantidade | number:'1.2-2' }} {{ unidade }}</span>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

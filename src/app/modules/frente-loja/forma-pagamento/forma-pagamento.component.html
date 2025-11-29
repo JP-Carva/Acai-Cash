@@ -42,8 +42,8 @@
                 </div>
             }
             <div>
-                <span class="font-bold">Restante a ser Pago: R${{ valorFinal | number:'1.2-2' }}</span>
-                @if (troco > 0) {
+                <span class="font-bold">Total a receber: R${{ valorFinal | number:'1.2-2' }}</span>
+                @if (troco != 0 && troco > 0) {
                     <span class="text-green-600 font-semibold ml-4">Troco: R${{ troco | number:'1.2-2' }}</span>
                 } 
             </div>
