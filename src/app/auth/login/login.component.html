@@ -13,31 +13,40 @@
                             <span class="text-muted-color font-medium">Faça login para continuar</span>
                         </div>
 
-                        <div class="form-container">
+                        <form (ngSubmit)="onSubmit()" #loginForm="ngForm" novalidate class="form-container" style="max-width: 320px;">
                             <label for="login" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Login</label>
-                            <input pInputText type="text" placeholder="Login"
-                            [(ngModel)]="login" 
-                            class="block mb-4"
-                            style="max-width: 320px; min-width: 270px" />
+                            <input pInputText name="login" required type="text" placeholder="Login"
+                                [(ngModel)]="login"
+                                [ngClass]="{'border-red-500': submitted && !login}"
+                                class="block mb-2"
+                                style="max-width: 320px; min-width: 270px" />
+                                @if (submitted && !login) {
+                                    <div class="text-red-500 text-sm mb-2">Informe o login.</div>
+                                }
 
-                            <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Senha</label>
-                            <input pInputText type="password" placeholder="Password" [(ngModel)]="password" class="block mb-4" style="max-width: 320px; min-width: 270px" />
+                            <label for="password" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Senha</label>
+                            <input pInputText name="password" required type="password" placeholder="Password"
+                                [(ngModel)]="password"
+                                [ngClass]="{'border-red-500': submitted && !password}"
+                                class="block mb-2"
+                                style="max-width: 320px; min-width: 270px" />
+                                @if (submitted && !password) {
+                                    <div class="text-red-500 text-sm mb-4">Informe a senha.</div>
+                                }
 
                             <div class="flex items-center justify-between mt-2 mb-8 gap-8">
                                 <div class="flex items-center">
-                                    <p-checkbox [(ngModel)]="checked" id="rememberme1" binary class="mr-2"></p-checkbox>
+                                    <p-checkbox [(ngModel)]="checked" name="remember" id="rememberme1" binary class="mr-2"></p-checkbox>
                                     <label for="rememberme1">Lembrar-me</label>
                                 </div>
                                 <span class="font-medium no-underline mt-4 ml-2 text-right cursor-pointer text-primary">Esqueceu a senha?</span>
                             </div>
-                        </div>
 
-                        <div class="flex flex-col items-center">
-
-                            <button pButton pRipple label="Entrar" type="button" class="block"
-                            style="width: 100%; margin-bottom: 20px;" (click)="onSubmit()"></button>
-                            
-                        </div>
+                            <div class="flex flex-col items-center">
+                                <button pButton pRipple label="Entrar" type="submit" class="block"
+                                    style="width: 100%; margin-bottom: 20px;"></button>
+                            </div>
+                        </form>
                     </div>
                 
                 </div>

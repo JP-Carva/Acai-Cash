@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, OnInit, inject } from "@angular/core";
 import { VendaService } from "@/services/venda.service";
 import { Venda } from "@/modules/frente-loja/model/venda";
+import { parseDateLocal } from "@/utils/date-util";
 
 @Component({
     selector: 'app-dados-widget',
@@ -23,7 +24,9 @@ export class DadosWidgetComponent implements OnInit {
     crescimentoFaturamentoPercent = 0; // %
 
     ngOnInit(): void {
-        this.vendaService.getAllVendas().subscribe(vendas => {
+        // Carrega inicial e assina para atualizações em tempo real
+        this.vendaService.refreshVendas();
+        this.vendaService.vendas$.subscribe(vendas => {
             this.calcularMetricas(vendas);
         });
     }
@@ -41,7 +44,7 @@ export class DadosWidgetComponent implements OnInit {
         let totalAnterior = 0;
 
         for (const v of vendas) {
-            const d = new Date(v.dataVenda as any);
+            const d = parseDateLocal(v.dataVenda as any);
             const ano = d.getFullYear();
             const mes = d.getMonth();
             const itens = v.itensVenda?.length || 0;
