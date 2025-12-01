@@ -1,8 +1,11 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectorRef, Component, inject, OnInit, PLATFORM_ID } from "@angular/core";
+import { ChangeDetectorRef, Component, inject, OnInit } from "@angular/core";
 import { ChartModule } from "primeng/chart";
+import { FormsModule } from "@angular/forms";
+import { SelectModule } from "primeng/select";
 import { VendaService } from "@/services/venda.service";
 import { Venda } from "@/modules/frente-loja/model/venda";
+import { parseDateLocal } from "@/utils/date-util";
 
 @Component({
     selector: 'app-donut-widget',
@@ -10,7 +13,9 @@ import { Venda } from "@/modules/frente-loja/model/venda";
     templateUrl: './donut-widget.component.html',
     imports: [
         ChartModule,
-        CommonModule
+        CommonModule,
+        FormsModule,
+        SelectModule
     ],
 })
 export class DonutWidgetComponent implements OnInit {
@@ -20,34 +25,55 @@ export class DonutWidgetComponent implements OnInit {
 
     chartOptions: any;
 
-    platformId = inject(PLATFORM_ID);
     vendaService = inject(VendaService);
 
     // Lista exibida abaixo do gráfico: { nome, quantidade }
     topProdutos: Array<{ nome: string; quantidade: number }> = [];
     unidade = 'Prod. em Vendas';
 
+    // Filtros de período
+    private vendasCache: Venda[] = [];
+    mesesLabels = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+    mesesOptions: {label: string, value: number}[] = [];
+    selectedMes: number = -1; // -1 = Todos
+    selectedAno: number = new Date().getFullYear();
+    anosOptions: {label: string, value: number}[] = [];
+
     constructor(private cd: ChangeDetectorRef) {}
 
     ngOnInit() {
-        this.vendaService.getAllVendas().subscribe((vendas) => {
-            this.initChart(vendas);
+        // Opções de mês
+        this.mesesOptions = [{ label: 'Todos', value: -1 }, ...this.mesesLabels.map((m, i) => ({ label: m, value: i }))];
+        // Carrega inicial e assina para atualizações em tempo real
+        this.vendaService.refreshVendas();
+        this.vendaService.vendas$.subscribe((vendas) => {
+            this.vendasCache = vendas;
+            this.computeYears();
+            this.buildChart();
         });
     }
 
-    initChart(vendas: Venda[]) {
+    onMonthChange() {
+        this.buildChart();
+    }
+
+    onYearChange() {
+        this.buildChart();
+    }
+
+    private buildChart() {
         const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--p-text-color') || documentStyle.getPropertyValue('--text-color');
 
-        // Agrega por produto considerando apenas o mês atual
-        const agora = new Date();
-        const anoAtual = agora.getFullYear();
-        const mesAtual = agora.getMonth();
+        // Agrega por produto considerando filtros de ano/mês
+        const anoRef = this.selectedAno;
+        const mesRef = this.selectedMes; // -1 = todos os meses
         const mapa: Record<string, number> = {};
 
-        for (const v of vendas) {
-            const d = new Date(v.dataVenda as any);
-            if (d.getFullYear() !== anoAtual || d.getMonth() !== mesAtual) continue;
+        for (const v of this.vendasCache) {
+            const d = parseDateLocal(v.dataVenda as any);
+            if (d.getFullYear() !== anoRef) continue;
+            if (mesRef >= 0 && d.getMonth() !== mesRef) continue;
             for (const it of v.itensVenda || []) {
                 const nome = it?.produto?.nome || 'Desconhecido';
                 const qtd = 1; // cada item de venda conta como 1 unidade
@@ -112,5 +138,17 @@ export class DonutWidgetComponent implements OnInit {
         };
 
         this.cd.markForCheck();
+    }
+
+    private computeYears() {
+        const years = new Set<number>();
+        for (const v of this.vendasCache) {
+            const d = parseDateLocal(v.dataVenda as any);
+            if (!isNaN(d.getTime())) years.add(d.getFullYear());
+        }
+        const sorted = Array.from(years.values()).sort((a, b) => a - b);
+        const current = new Date().getFullYear();
+        this.anosOptions = sorted.map(y => ({ label: String(y), value: y }));
+        if (sorted.includes(current)) this.selectedAno = current; else if (sorted.length) this.selectedAno = sorted[sorted.length - 1];
     }
 }

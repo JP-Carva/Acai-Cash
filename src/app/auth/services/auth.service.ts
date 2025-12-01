@@ -19,13 +19,13 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<LoginResponse> {
-    // Primary: validate with backend
+    // Primary: valida com o backend
     return this.http.post<LoginResponse>('/api/login', { email, password }).pipe(
       tap(res => {
         sessionStorage.setItem('authToken', res.token);
         sessionStorage.setItem('username', res.username ?? email);
       }),
-      // Fallback: if backend unavailable, allow fake login for Administrador/admin only
+      // Fallback: se o backend estiver indisponível, permite login falso apenas para Administrador/admin
       catchError(err => {
         const ok = email === login && password === senha;
         if (!ok) {
@@ -48,5 +48,10 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     return !!sessionStorage.getItem('authToken');
+  }
+
+  logout(): void {
+    sessionStorage.removeItem('authToken');
+    sessionStorage.removeItem('username');
   }
 }

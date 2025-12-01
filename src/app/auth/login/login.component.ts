@@ -1,5 +1,6 @@
 import { AppFloatingConfigurator } from "@/layout/component/app.floatingconfigurator";
 import { Component, inject } from "@angular/core";
+import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
 import { ButtonModule } from "primeng/button";
@@ -18,6 +19,7 @@ import { DialogModule } from "primeng/dialog";
   standalone: true,
   templateUrl: "./login.component.html",
   imports: [
+    CommonModule,
     ButtonModule,
     CheckboxModule,
     InputTextModule,
@@ -35,12 +37,14 @@ export class LoginComponent {
     password?: string;
 
     checked: boolean = false;
+    submitted = false;
 
     authService = inject(AuthService);
     messageService = inject(MessageService);
     router = inject(Router);
 
     onSubmit(){
+      this.submitted = true;
       if(this.login && this.password) {
         this.authService.login(this.login, this.password)
         .subscribe({

@@ -5,6 +5,7 @@ import { FormsModule } from "@angular/forms";
 import { SelectModule } from "primeng/select";
 import { VendaService } from "@/services/venda.service";
 import { Venda } from "@/modules/frente-loja/model/venda";
+import { parseDateLocal } from "@/utils/date-util";
 
 @Component({
     selector: 'app-tabela-widget',
@@ -35,7 +36,9 @@ export class TabelaWidgetComponent implements OnInit {
         this.mesesOptions = [{ label: 'Todos', value: -1 }, ...this.mesesLabels.map((m, i) => ({ label: m, value: i }))];
         this.highlightOptions = [{ label: 'Nenhum', value: -1 }, ...this.mesesLabels.map((m, i) => ({ label: m, value: i }))];
 
-        this.vendaService.getAllVendas().subscribe(vendas => {
+        // Inicializa e assina atualizações em tempo real
+        this.vendaService.refreshVendas();
+        this.vendaService.vendas$.subscribe(vendas => {
             this.vendasCache = vendas;
             this.computeYears();
             this.buildChart();
@@ -61,7 +64,7 @@ export class TabelaWidgetComponent implements OnInit {
         const itensPorMes = Array(12).fill(0);
 
         for (const v of this.vendasCache) {
-            const d = new Date(v.dataVenda as any);
+            const d = parseDateLocal(v.dataVenda as any);
             if (d.getFullYear() !== anoAtual) continue;
             const mes = d.getMonth();
             const itens = v.itensVenda?.length || 0;
@@ -154,7 +157,7 @@ export class TabelaWidgetComponent implements OnInit {
     private computeYears() {
         const years = new Set<number>();
         for (const v of this.vendasCache) {
-            const d = new Date(v.dataVenda as any);
+            const d = parseDateLocal(v.dataVenda as any);
             if (!isNaN(d.getTime())) years.add(d.getFullYear());
         }
         const sorted = Array.from(years.values()).sort((a, b) => a - b);

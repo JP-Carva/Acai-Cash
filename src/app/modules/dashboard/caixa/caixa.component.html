@@ -3,7 +3,10 @@
         <div class="flex items-center gap-2 font-semibold text-xl">
             <img src="https://raw.githubusercontent.com/JP-Carva/Acai-Cash/refs/heads/master/src/logo.ico" alt="Açaí Cash" style="height:40px;width:40px;object-fit:contain;margin-top: -8px;">
             Caixa</div>
-        <p-button type="button" iconPos="right" icon="pi pi-plus" label="Nova Venda" (click)="iniciarVenda()"/>
+        <div class="flex items-center gap-2">
+            <p-button type="button" iconPos="right" icon="pi pi-plus" label="Nova Venda" (click)="iniciarVenda()"/>
+            <p-button type="button" icon="pi pi-file" label="Relatório PDF" (click)="gerarRelatorio()"/>
+        </div>
     </div>
     <div class="flex items-center mb-4 gap-2"> 
         <button pButton text icon="pi pi-filter" (click)="filtrarVendas()">Filtrar</button>
@@ -13,7 +16,7 @@
     </div>
     <p-table
         #dt
-        [value]="page.content"
+        [value]="vendas"
         [paginator]="true"
         [rows]="5"
         [tableStyle]="{ 'min-width': '50rem' }"
@@ -62,8 +65,9 @@
                 <td>{{ venda.id }}</td>
                 <td>{{ venda.dataVenda | date: 'dd/MM/yyyy' }}</td>
                 <td>{{ venda.horaVenda | slice:0:5}}</td>
-                <td style="width: 6rem">
+                <td style="width: 9rem">
                     <button pButton text icon="pi pi-eye" class="!w-6 !h-6 mr-2" (click)="verDetalhesVenda(venda)"></button>
+                    <button pButton text icon="pi pi-print" class="!w-6 !h-6 mr-2" (click)="imprimirNota(venda)"></button>
                     <button pButton text icon="pi pi-trash" class="!w-6 !h-6" (click)="onDialogDeleteShow(venda)"></button>
                 </td>
             </tr>

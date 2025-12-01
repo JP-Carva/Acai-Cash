@@ -1,7 +1,6 @@
 import { Venda } from "@/modules/frente-loja/model/venda";
 import { newPage } from "@/modules/produtos/models/page";
 import { VendaService } from "@/services/venda.service";
-import { ItemVendaService } from "@/services/item-venda.service";
 import { customSort } from "@/utils/sort-util";
 import { CommonModule } from "@angular/common";
 import { ChangeDetectorRef, Component, EventEmitter, inject, OnInit, ViewChild } from "@angular/core";
@@ -13,9 +12,7 @@ import { DialogModule } from "primeng/dialog";
 import { ProgressBarModule } from "primeng/progressbar";
 import { Table, TableModule } from "primeng/table";
 import { ModalDetalheVenda } from "./modal-detalhe-venda/modal-detalhe-venda.component";
-import { IconField } from "primeng/iconfield";
-import { InputIcon } from "primeng/inputicon";
-import { PagamentoService } from "@/services/pagamento.service";
+import { PdfService } from "@/services/pdf.service";
 
 @Component({
     selector: 'app-caixa',
@@ -42,6 +39,7 @@ export class CaixaComponent implements OnInit{
     vendaService = inject(VendaService);
     cdRef = inject(ChangeDetectorRef);
     messageService = inject(MessageService);
+    pdfService = inject(PdfService);
 
     
     isSorted: boolean | null = null;
@@ -82,6 +80,16 @@ export class CaixaComponent implements OnInit{
 
     verDetalhesVenda(venda: Venda): void {
         this.eventMostraModalDetalheVenda.emit(venda);
+    }
+
+    imprimirNota(venda: Venda): void {
+        this.pdfService.printVenda(venda);
+    }
+
+    gerarRelatorio(): void {
+        const vendas = (this.dt?.filteredValue as Venda[]) ?? this.page.content ?? [];
+        const titulo = 'Relatório de Vendas';
+        this.pdfService.printRelatorio(vendas, titulo);
     }
 
     onDialogDeleteShow(venda: Venda): void {
