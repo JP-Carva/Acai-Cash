@@ -19,7 +19,7 @@ export const appRoutes: Routes = [
             },
             {
                 path: 'caixa',
-                loadComponent: () => import('@/modules/dashboard/caixa/caixa.component').then(m => m.CaixaComponent)
+                loadComponent: () => import('@/modules/caixa/caixa.component').then(m => m.CaixaComponent)
             },
             {
                 path: 'frente-loja',
