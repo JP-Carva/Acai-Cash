@@ -18,28 +18,28 @@ export class AuthService {
     console.log('AuthService initialized');
   }
 
-  login(email: string, password: string): Observable<LoginResponse> {
+  login(login: string, password: string): Observable<LoginResponse> {
     // Primary: valida com o backend
-    return this.http.post<LoginResponse>('/api/login', { email, password }).pipe(
+    return this.http.post<LoginResponse>('/api/login', { login, password }).pipe(
       tap(res => {
         sessionStorage.setItem('authToken', res.token);
-        sessionStorage.setItem('username', res.username ?? email);
+        sessionStorage.setItem('username', res.username ?? login);
       }),
       // Fallback: se o backend estiver indisponível, permite login falso apenas para Administrador/admin
       catchError(err => {
-        const ok = email === login && password === senha;
+        const ok = login === login && password === senha;
         if (!ok) {
           return throwError(() => err);
         }
         const mock: LoginResponse = {
           token: 'fake-token-' + Math.random().toString(36).slice(2),
-          username: email
+          username: login
         } as LoginResponse;
         return of(mock).pipe(
           delay(200),
           tap(res => {
             sessionStorage.setItem('authToken', res.token);
-            sessionStorage.setItem('username', res.username ?? email);
+            sessionStorage.setItem('username', res.username ?? login);
           })
         );
       })
